@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapport de Résultats - Formation Archivage Numérique</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <title>Corrigé Digital - Formation Archivage Numérique</title>
     <style>
         * {
             margin: 0;
@@ -21,1046 +20,864 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
         
         .header {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 15px;
+            padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #48bb78, #4299e1, #9f7aea);
         }
         
         .header h1 {
-            color: #2d3748;
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-        }
-        
-        .header .date-info {
-            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
-            padding: 15px 30px;
-            border-radius: 25px;
-            display: inline-block;
             color: #4a5568;
-            font-weight: 600;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
         
-        .section {
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .section-header {
-            background: linear-gradient(135deg, #4299e1, #3182ce);
-            color: white;
-            padding: 25px 30px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .section-header .icon {
-            font-size: 1.8rem;
-        }
-        
-        .section-content {
-            padding: 30px;
-        }
-        
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .metric-card {
-            background: linear-gradient(135deg, #f7fafc, #edf2f7);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-color: #4299e1;
-        }
-        
-        .metric-number {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #4299e1, #3182ce);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .metric-label {
+        .header p {
             color: #718096;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        
-        .participant-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .participant-table th {
-            background: linear-gradient(135deg, #4299e1, #3182ce);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        .participant-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .participant-table tr:hover {
-            background: #f7fafc;
-        }
-        
-        .score-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        .score-bien {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-        }
-        
-        .score-assez-bien {
-            background: linear-gradient(135deg, #ed8936, #dd6b20);
-        }
-        
-        .improvement-badge {
-            background: linear-gradient(135deg, #9f7aea, #805ad5);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .chart-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 20px;
-            text-align: center;
+            font-size: 1.1rem;
         }
         
         .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .progress {
+            width: 100%;
+            height: 20px;
             background: #e2e8f0;
             border-radius: 10px;
-            height: 20px;
-            margin: 10px 0;
             overflow: hidden;
         }
         
         .progress-fill {
             height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
             border-radius: 10px;
-            transition: width 0.8s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
+            transition: width 0.3s ease;
         }
         
-        .module-analysis {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .module-card {
-            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+        .module {
+            background: white;
             border-radius: 15px;
-            padding: 20px;
-            border-left: 4px solid #4299e1;
-        }
-        
-        .module-title {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 10px;
-        }
-        
-        .module-score {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4299e1;
-            margin-bottom: 10px;
-        }
-        
-        .module-details {
-            color: #718096;
-            font-size: 0.9rem;
-        }
-        
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-        
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #4299e1;
-        }
-        
-        .timeline-item {
-            position: relative;
             margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -37px;
-            top: 25px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #4299e1;
-        }
-        
-        .timeline-title {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 10px;
-        }
-        
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .action-item {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid #4299e1;
-        }
-        
-        .footer {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .module-header {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .module-header:hover {
+            background: linear-gradient(135deg, #3182ce, #2c5282);
+        }
+        
+        .module-header h2 {
+            font-size: 1.5rem;
+            display: flex;
             align-items: center;
+            justify-content: space-between;
         }
         
-        .contact-info {
-            color: #718096;
+        .module-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
         
-        .signature {
+        .module-content.active {
+            max-height: 5000px;
+            padding: 20px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #4299e1;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .question-text {
             font-weight: 600;
+            font-size: 1.1rem;
             color: #2d3748;
         }
         
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .header .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .header .date-info {
-                font-size: 0.9rem;
-                padding: 12px 20px;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .section-content {
-                padding: 15px;
-            }
-            
-            .section-header {
-                padding: 20px 15px;
-                font-size: 1.2rem;
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-            
-            .metric-card {
-                padding: 20px 15px;
-            }
-            
-            .metric-number {
-                font-size: 2.2rem;
-            }
-            
-            .metric-label {
-                font-size: 0.9rem;
-            }
-            
-            .participant-table {
-                font-size: 0.85rem;
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .participant-table th,
-            .participant-table td {
-                padding: 10px 8px;
-                min-width: 120px;
-            }
-            
-            .score-badge {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .improvement-badge {
-                padding: 3px 10px;
-                font-size: 0.8rem;
-            }
-            
-            .module-analysis {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .module-card {
-                padding: 15px;
-            }
-            
-            .module-score {
-                font-size: 1.5rem;
-            }
-            
-            .timeline {
-                padding-left: 20px;
-            }
-            
-            .timeline-item {
-                padding: 15px;
-                margin-bottom: 20px;
-            }
-            
-            .timeline-item::before {
-                left: -27px;
-            }
-            
-            .action-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .action-item {
-                padding: 12px;
-                font-size: 0.9rem;
-            }
-            
-            .chart-container {
-                padding: 15px;
-            }
-            
-            .chart-title {
-                font-size: 1rem;
-                margin-bottom: 15px;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 15px;
-            }
+        .options {
+            margin: 15px 0;
         }
         
-        @media (max-width: 480px) {
-            .header {
-                padding: 25px 20px;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-                line-height: 1.3;
-            }
-            
-            .header .subtitle {
-                font-size: 1rem;
-            }
-            
-            .header .date-info {
-                font-size: 0.8rem;
-                padding: 10px 15px;
-            }
-            
-            .container {
-                padding: 8px;
-            }
-            
-            .section {
-                margin-bottom: 20px;
-            }
-            
-            .section-content {
-                padding: 12px;
-            }
-            
-            .section-header {
-                padding: 15px 12px;
-                font-size: 1.1rem;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .metric-card {
-                padding: 18px 12px;
-            }
-            
-            .metric-number {
-                font-size: 2rem;
-            }
-            
-            .metric-label {
-                font-size: 0.85rem;
-            }
-            
-            .participant-table {
-                font-size: 0.8rem;
-            }
-            
-            .participant-table th,
-            .participant-table td {
-                padding: 8px 6px;
-                min-width: 100px;
-            }
-            
-            .module-card {
-                padding: 12px;
-            }
-            
-            .module-title {
-                font-size: 0.9rem;
-            }
-            
-            .module-score {
-                font-size: 1.3rem;
-            }
-            
-            .module-details {
-                font-size: 0.8rem;
-            }
-            
-            .timeline-item {
-                padding: 12px;
-            }
-            
-            .timeline-title {
-                font-size: 0.9rem;
-            }
-            
-            .action-item {
-                padding: 10px;
-                font-size: 0.85rem;
-            }
-            
-            .chart-container {
-                padding: 12px;
-            }
-            
-            .chart-title {
-                font-size: 0.9rem;
-            }
-            
-            .progress-fill {
-                font-size: 0.7rem;
-                padding-right: 6px;
-            }
+        .option {
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .option.correct {
+            background: #c6f6d5;
+            border-color: #48bb78;
+            color: #22543d;
+        }
+        
+        .option.incorrect {
+            background: #fed7d7;
+            border-color: #e53e3e;
+            color: #742a2a;
+        }
+        
+        .explanation {
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .explanation-header {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .explanation-text {
+            color: #718096;
+            line-height: 1.6;
+        }
+        
+        .reference {
+            background: #bee3f8;
+            color: #2c5282;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4299e1;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
         <div class="header">
-            <h1>Rapport de Résultats Final</h1>
-            <div class="subtitle">Formation Archivage Numérique</div>
-            <div class="date-info">17-21 Septembre 2025 • 6 Participants</div>
+            <h1>Corrigé Digital</h1>
+            <p>Formation Archivage Numérique - 17-20 Septembre 2025</p>
         </div>
-
-        <!-- SYNTHÈSE EXÉCUTIVE -->
-        <div class="section">
-            <div class="section-header">
-                <span>📊 Synthèse Exécutive</span>
-                <span class="icon">🎯</span>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">29</div>
+                <div class="stat-label">Questions</div>
             </div>
-            <div class="section-content">
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-number">100%</div>
-                        <div class="metric-label">Taux de Réussite</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-number">76%</div>
-                        <div class="metric-label">Score Moyen</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-number">+14</div>
-                        <div class="metric-label">Points d'Amélioration</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-number">6/6</div>
-                        <div class="metric-label">Participants Qualifiés</div>
-                    </div>
-                </div>
-                
-                <p style="color: #4a5568; font-size: 1.1rem; line-height: 1.8; text-align: center; margin-top: 20px;">
-                    Formation achevée avec succès après correction technique. Évaluation rigoureuse révélant des performances 
-                    supérieures aux scores initiaux. Tous les participants atteignent le niveau opérationnel requis.
-                </p>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Modules</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">70%</div>
+                <div class="stat-label">Seuil de Réussite</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">58</div>
+                <div class="stat-label">Minutes Recommandées</div>
             </div>
         </div>
-
-        <!-- CORRECTION TECHNIQUE -->
-        <div class="section">
-            <div class="section-header">
-                <span>🔧 Correction Technique Appliquée</span>
-                <span class="icon">✅</span>
+        
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" style="width: 100%"></div>
             </div>
-            <div class="section-content">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-title">1. Détection du Dysfonctionnement</div>
-                        <p>Bug d'évaluation causant sous-notation de 10-20 points par participant. Détection par analyse comparative et vérification croisée avec le corrigé officiel.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-title">2. Actions Correctives</div>
-                        <div class="action-grid">
-                            <div class="action-item">Purge base de données</div>
-                            <div class="action-item">Correction algorithme</div>
-                            <div class="action-item">Tests de validation</div>
-                            <div class="action-item">Nouveau quiz participants</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-title">3. Validation des Résultats</div>
-                        <p>Vérification systématique avec le corrigé officiel des 29 questions. Révélation des véritables performances masquées par le bug technique.</p>
-                    </div>
-                </div>
-            </div>
+            <p style="text-align: center; margin-top: 10px; color: #4a5568;">Corrigé Complet - 29/29 Questions</p>
         </div>
 
-        <!-- RÉSULTATS PARTICIPANTS -->
-        <div class="section">
-            <div class="section-header">
-                <span>👥 Résultats Finaux par Participant</span>
-                <span class="icon">📈</span>
+        <!-- MODULE 1 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 1 : Introduction à l'Archivage Numérique
+                    <span class="toggle-icon">▼</span>
+                </h2>
             </div>
-            <div class="section-content">
-                <table class="participant-table">
-                    <thead>
-                        <tr>
-                            <th>Participant</th>
-                            <th>Score Initial</th>
-                            <th>Score Final</th>
-                            <th>Amélioration</th>
-                            <th>Niveau Atteint</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>MOKOY NDINGO JOE</strong></td>
-                            <td>62%</td>
-                            <td><strong>79%</strong></td>
-                            <td><span class="improvement-badge">+17</span></td>
-                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>LOKWA NADINE</strong></td>
-                            <td>62%</td>
-                            <td><strong>76%</strong></td>
-                            <td><span class="improvement-badge">+14</span></td>
-                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>KABWA PATIE</strong></td>
-                            <td>62%</td>
-                            <td><strong>72%</strong></td>
-                            <td><span class="improvement-badge">+10</span></td>
-                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BODAT</strong></td>
-                            <td>55%</td>
-                            <td><strong>73%</strong></td>
-                            <td><span class="improvement-badge">+18</span></td>
-                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BOLINA BAKINA J. de D.</strong></td>
-                            <td>48%</td>
-                            <td><strong>69%</strong></td>
-                            <td><span class="improvement-badge">+21</span></td>
-                            <td><span class="score-badge score-assez-bien">Assez Bien (12-13/20)</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>LESSA LUKENI MEANCE</strong></td>
-                            <td>48%</td>
-                            <td><strong>68%</strong></td>
-                            <td><span class="improvement-badge">+20</span></td>
-                            <td><span class="score-badge score-assez-bien">Assez Bien (12-13/20)</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="chart-container">
-                    <div class="chart-title">Comparaison Scores Avant/Après Correction</div>
-                    <canvas id="scoresChart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- ANALYSE DES COMPÉTENCES -->
-        <div class="section">
-            <div class="section-header">
-                <span>📚 Analyse Détaillée des Compétences</span>
-                <span class="icon">🎓</span>
-            </div>
-            <div class="section-content">
-                <div class="module-analysis">
-                    <div class="module-card">
-                        <div class="module-title">Module 1 - Fondamentaux</div>
-                        <div class="module-score">83%</div>
-                        <div class="module-details">
-                            Questions 0-2 • Concepts RGPD et enjeux bien assimilés
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 83%; background: linear-gradient(135deg, #48bb78, #38a169);">83%</div>
-                        </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">1</div>
+                        <div class="question-text">Quel est le principal enjeu de l'archivage numérique dans une organisation moderne ?</div>
                     </div>
-                    
-                    <div class="module-card">
-                        <div class="module-title">Module 2 - Bonnes Pratiques</div>
-                        <div class="module-score">78%</div>
-                        <div class="module-details">
-                            Questions 3-7 • Nommage et arborescences maîtrisés
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 78%; background: linear-gradient(135deg, #48bb78, #38a169);">78%</div>
-                        </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Réduire les coûts de stockage physique</div>
+                        <div class="option correct">1: Assurer la sécurité, l'accessibilité et la conformité des données</div>
+                        <div class="option incorrect">2: Diminuer le nombre d'employés</div>
+                        <div class="option incorrect">3: Améliorer le design des bureaux</div>
                     </div>
-                    
-                    <div class="module-card">
-                        <div class="module-title">Module 3 - Outils GED</div>
-                        <div class="module-score">85%</div>
-                        <div class="module-details">
-                            Questions 8-12 • Excellente appropriation des outils cloud
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 85%; background: linear-gradient(135deg, #48bb78, #38a169);">85%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-title">Module 4 - Cas Pratiques</div>
-                        <div class="module-score">72%</div>
-                        <div class="module-details">
-                            Questions 13-17 • Recherche avancée et versioning compris
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 72%; background: linear-gradient(135deg, #48bb78, #38a169);">72%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-title">Module 5 - Infrastructure</div>
-                        <div class="module-score">89%</div>
-                        <div class="module-details">
-                            Questions 18-20 • Enjeux RGPD parfaitement saisis
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 89%; background: linear-gradient(135deg, #48bb78, #38a169);">89%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card">
-                        <div class="module-title">Module 6 - Canva & QR Codes</div>
-                        <div class="module-score">74%</div>
-                        <div class="module-details">
-                            Questions 21-28 • Applications métier comprises
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill score-bien" style="width: 74%; background: linear-gradient(135deg, #48bb78, #38a169);">74%</div>
-                        </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'archivage numérique moderne repose sur trois piliers fondamentaux : la SÉCURITÉ (protection contre les pertes), l'ACCESSIBILITÉ (retrouver rapidement) et la CONFORMITÉ (respect des obligations légales).</div>
+                        <div class="reference">📚 Référence : Module 1 - Les 3 piliers de l'archivage numérique</div>
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <div class="chart-title">Performance par Module</div>
-                    <canvas id="modulesChart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- ÉVALUATION GLOBALE -->
-        <div class="section">
-            <div class="section-header">
-                <span>🎯 Évaluation Globale de la Formation</span>
-                <span class="icon">✅</span>
-            </div>
-            <div class="section-content">
-                <table class="participant-table">
-                    <thead>
-                        <tr>
-                            <th>Critère</th>
-                            <th>Objectif</th>
-                            <th>Résultat</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Taux de réussite (≥60%)</strong></td>
-                            <td>80%</td>
-                            <td><strong>100%</strong></td>
-                            <td><span class="score-badge score-bien">Dépassé</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Score moyen</strong></td>
-                            <td>65%</td>
-                            <td><strong>76%</strong></td>
-                            <td><span class="score-badge score-bien">Dépassé</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Appropriation outils</strong></td>
-                            <td>70%</td>
-                            <td><strong>85%</strong></td>
-                            <td><span class="score-badge score-bien">Dépassé</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Autonomie acquise</strong></td>
-                            <td>75%</td>
-                            <td><strong>78%</strong></td>
-                            <td><span class="score-badge score-bien">Atteint</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- PROPOSITION DE SUIVI -->
-        <div class="section">
-            <div class="section-header">
-                <span>🚀 Proposition de Suivi Post-Formation</span>
-                <span class="icon">📅</span>
-            </div>
-            <div class="section-content">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-title">Actions Immédiates (30 jours)</div>
-                        <div class="action-grid">
-                            <div class="action-item">Migration comptes @entreprisedgi.com</div>
-                            <div class="action-item">Application règles de nommage</div>
-                            <div class="action-item">Implémentation arborescence</div>
-                            <div class="action-item">Formation des absents</div>
-                        </div>
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">2</div>
+                        <div class="question-text">Quels sont les principaux risques d'un mauvais archivage numérique ?</div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-title">Actions Moyen Terme (3 mois)</div>
-                        <div class="action-grid">
-                            <div class="action-item">Révisions Visio Teams (Oct-Nov)</div>
-                            <div class="action-item">Migration comptes @entreprisedgi.com</div>
-                            <div class="action-item">Perfectionnement workflows</div>
-                            <div class="action-item">Sessions présentielles (Déc)</div>
-                        </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Augmentation des ventes</div>
+                        <div class="option correct">1: Pertes de données, doublons et non-respect des obligations légales</div>
+                        <div class="option incorrect">2: Amélioration de la productivité</div>
+                        <div class="option incorrect">3: Réduction des coûts</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Un mauvais archivage entraîne des risques opérationnels (perte de temps, doublons), juridiques (non-conformité) et financiers (amendes, reconstitution).</div>
+                        <div class="reference">📚 Référence : Module 1 - Risques du mauvais archivage</div>
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <div class="chart-title">Planning de Suivi - 48 heures sur 3 mois</div>
-                    <canvas id="suiviChart" width="400" height="200"></canvas>
-                </div>
-
-                <table class="participant-table" style="margin-top: 20px;">
-                    <thead>
-                        <tr>
-                            <th>Session</th>
-                            <th>Contenu</th>
-                            <th>Durée</th>
-                            <th>Format</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Révision Ciblée 1</strong></td>
-                            <td>Durées de conservation, Réglementation RGPD approfondie (Bolina, Lessa priorité)</td>
-                            <td>4h</td>
-                            <td>Visio Teams (Octobre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Révision Ciblée 2</strong></td>
-                            <td>Templates Canva avancés, QR Codes dynamiques (Bolina, Lessa)</td>
-                            <td>4h</td>
-                            <td>Visio Teams (Novembre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Perfectionnement Groupe</strong></td>
-                            <td>Recherche avancée, Workflows Box, Automatisations (Mokoy, Lokwa, Kabwa, Bodat)</td>
-                            <td>6h</td>
-                            <td>Visio Teams (Novembre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Migration Technique</strong></td>
-                            <td>Configuration comptes @entreprisedgi.com, Transfert données (Tous)</td>
-                            <td>8h</td>
-                            <td>Visio Teams (Octobre-Novembre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Audit et Conformité</strong></td>
-                            <td>Évaluation RGPD, Mise en conformité finale (Tous)</td>
-                            <td>6h</td>
-                            <td>Présentiel (Décembre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Formation Formateurs</strong></td>
-                            <td>Capacité formation interne, Création supports (Mokoy, Lokwa référents)</td>
-                            <td>8h</td>
-                            <td>Présentiel (Décembre)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Extension Services</strong></td>
-                            <td>Déploiement autres départements (Managers + participants)</td>
-                            <td>12h</td>
-                            <td>Présentiel (Janvier)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- CONCLUSION -->
-        <div class="section">
-            <div class="section-header">
-                <span>🎉 Conclusion</span>
-                <span class="icon">🏆</span>
-            </div>
-            <div class="section-content">
-                <div style="background: linear-gradient(135deg, #f0fff4, #c6f6d5); padding: 30px; border-radius: 15px; margin-bottom: 20px;">
-                    <h3 style="color: #22543d; margin-bottom: 15px; text-align: center;">Succès Technique et Pédagogique Confirmé</h3>
-                    <p style="color: #2f855a; text-align: center; font-size: 1.1rem; line-height: 1.8;">
-                        La formation "Archivage Numérique" constitue un succès complet avec 100% de réussite après correction 
-                        du bug technique. Le processus de détection et résolution a démontré la rigueur de l'approche qualité.
-                    </p>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-number">100%</div>
-                        <div class="metric-label">Réussite</div>
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">3</div>
+                        <div class="question-text">Dans le contexte RGPD, combien de temps maximum avez-vous pour notifier une violation de données ?</div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-number">76%</div>
-                        <div class="metric-label">Score Moyen</div>
+                    <div class="options">
+                        <div class="option incorrect">0: 24 heures</div>
+                        <div class="option incorrect">1: 48 heures</div>
+                        <div class="option correct">2: 72 heures</div>
+                        <div class="option incorrect">3: 1 semaine</div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-number">6</div>
-                        <div class="metric-label">Participants Autonomes</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-number">48h</div>
-                        <div class="metric-label">Suivi Planifié</div>
-                    </div>
-                </div>
-
-                <div style="background: #f7fafc; padding: 25px; border-radius: 15px; margin-top: 20px;">
-                    <h4 style="color: #2d3748; margin-bottom: 15px;">Impact Organisationnel</h4>
-                    <div class="action-grid">
-                        <div class="action-item">Modernisation pratiques documentaires</div>
-                        <div class="action-item">Capacité de formation interne</div>
-                        <div class="action-item">Conformité réglementaire assurée</div>
-                        <div class="action-item">Référence pour autres services</div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'article 33 du RGPD impose une notification à l'autorité de contrôle dans les 72 heures. Astuce mnémotechnique : 72h = 3 jours ouvrables.</div>
+                        <div class="reference">📚 Référence : Module 1 - Conformité RGPD</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- FOOTER -->
-        <div class="footer">
-            <div class="footer-content">
-                <div class="contact-info">
-                    <h4 style="color: #2d3748; margin-bottom: 5px;">Rapport établi le</h4>
-                    <p>22 septembre 2025 par Cétiane Mangobe</p>
+        <!-- MODULE 2 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 2 : Bonnes Pratiques de Classement
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">4</div>
+                        <div class="question-text">Quelle est la meilleure pratique pour nommer un fichier de facture ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: facture.pdf</div>
+                        <div class="option correct">1: FACTURE_2025-09-16_ENTREPRISE-ABC_F001.pdf</div>
+                        <div class="option incorrect">2: document1.pdf</div>
+                        <div class="option incorrect">3: mon_fichier.pdf</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Structure recommandée : AAAAMMJJ_TYPE_OBJET_VERSION. Date au début pour tri chronologique, pas d'espaces, mots-clés en majuscules.</div>
+                        <div class="reference">📚 Référence : Module 2 - Règles de nommage des fichiers</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">5</div>
+                        <div class="question-text">Quelle arborescence est la plus logique pour organiser des documents d'entreprise ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Tous les fichiers dans un seul dossier</div>
+                        <div class="option correct">1: Organisation par année > service > projet > type de document</div>
+                        <div class="option incorrect">2: Classement alphabétique uniquement</div>
+                        <div class="option incorrect">3: Organisation par couleur des dossiers</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'arborescence logique suit une hiérarchie temporelle puis organisationnelle, permettant une navigation intuitive et une évolutivité.</div>
+                        <div class="reference">📚 Référence : Module 2 - Création d'arborescences logiques</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">6</div>
+                        <div class="question-text">Combien de temps doit-on conserver les factures clients selon la loi française ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: 3 ans</div>
+                        <div class="option incorrect">1: 5 ans</div>
+                        <div class="option correct">2: 10 ans</div>
+                        <div class="option incorrect">3: 15 ans</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les factures clients doivent être conservées 10 ans selon la législation française. Les bulletins de paie : 50 ans, les déclarations fiscales : 6 ans.</div>
+                        <div class="reference">📚 Référence : Module 2 - Durées de conservation légales</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">7</div>
+                        <div class="question-text">Quel principe de gestion des droits d'accès est recommandé ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Donner tous les droits à tout le monde</div>
+                        <div class="option correct">1: Principe du moindre privilège (accès minimal nécessaire)</div>
+                        <div class="option incorrect">2: Seul le directeur a accès aux documents</div>
+                        <div class="option incorrect">3: Accès basé sur l'ancienneté uniquement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Le principe du moindre privilège consiste à donner uniquement les droits minimum nécessaires pour effectuer le travail. Sécurité optimale.</div>
+                        <div class="reference">📚 Référence : Module 2 - Gestion des droits d'accès</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">8</div>
+                        <div class="question-text">Qu'est-ce que l'automatisation du classement permet d'améliorer ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: La décoration des bureaux</div>
+                        <div class="option correct">1: La cohérence, la vitesse et la réduction des erreurs humaines</div>
+                        <div class="option incorrect">2: Le nombre d'employés</div>
+                        <div class="option incorrect">3: La couleur des documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'automatisation apporte cohérence (même règles appliquées), rapidité (traitement en masse) et fiabilité (moins d'erreurs manuelles).</div>
+                        <div class="reference">📚 Référence : Module 2 - Automatisation du classement</div>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- MODULE 3 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 3 : Outils Modernes de GED
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">9</div>
+                        <div class="question-text">Quelle technologie permet la collaboration en temps réel sur un document ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Email uniquement</div>
+                        <div class="option correct">1: Plateforme collaborative cloud (Google Workspace, Office 365)</div>
+                        <div class="option incorrect">2: Téléphone</div>
+                        <div class="option incorrect">3: Courrier postal</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les plateformes cloud permettent l'édition simultanée, les commentaires en temps réel et la synchronisation automatique des modifications.</div>
+                        <div class="reference">📚 Référence : Module 3 - Collaboration avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">10</div>
+                        <div class="question-text">Quelle mesure de sécurité est essentielle pour protéger l'archivage numérique ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Utiliser des mots de passe simples</div>
+                        <div class="option correct">1: Double authentification et sauvegardes régulières</div>
+                        <div class="option incorrect">2: Garder tous les accès ouverts</div>
+                        <div class="option incorrect">3: Ne jamais faire de mise à jour</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">La double authentification ajoute une couche de sécurité, et les sauvegardes protègent contre la perte de données. Deux mesures complémentaires essentielles.</div>
+                        <div class="reference">📚 Référence : Module 3 - Sécurisation avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">11</div>
+                        <div class="question-text">Quel avantage spécifique offre Google Drive pour l'archivage ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Stockage illimité gratuit</div>
+                        <div class="option correct">1: Recherche intelligente et intégration Google Workspace</div>
+                        <div class="option incorrect">2: Impossibilité de partage</div>
+                        <div class="option incorrect">3: Accès hors ligne uniquement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Google Drive excelle par sa recherche OCR dans les PDF, sa recherche par type de fichier, et l'intégration native avec Docs, Sheets, etc.</div>
+                        <div class="reference">📚 Référence : Module 3 - Google Drive utilisation avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">12</div>
+                        <div class="question-text">Pourquoi Box est-il particulièrement adapté aux entreprises ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Il est gratuit pour tous</div>
+                        <div class="option correct">1: Gestion avancée des droits, traçabilité et sécurité renforcée</div>
+                        <div class="option incorrect">2: Il ne fonctionne que sur mobile</div>
+                        <div class="option incorrect">3: Il n'autorise aucun partage</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Box propose des workflows d'approbation, un audit complet des accès, et des fonctionnalités de sécurité entreprise (watermarking, restrictions géographiques).</div>
+                        <div class="reference">📚 Référence : Module 3 - Box gestion documentaire sécurisée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">13</div>
+                        <div class="question-text">Quelle fonctionnalité est commune aux trois outils (Drive, OneDrive, Box) ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option correct">0: Versioning et historique des modifications</div>
+                        <div class="option incorrect">1: Coût identique</div>
+                        <div class="option incorrect">2: Interface utilisateur identique</div>
+                        <div class="option incorrect">3: Limitation à 1 utilisateur</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Tous les outils GED modernes proposent le versioning pour restaurer des versions antérieures et tracer les modifications. Fonctionnalité fondamentale.</div>
+                        <div class="reference">📚 Référence : Module 3 - Fonctionnalités communes GED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 4 : Cas Pratiques Dirigés
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">14</div>
+                        <div class="question-text">Pour retrouver rapidement un document archivé, quelle méthode est la plus efficace ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Parcourir tous les dossiers manuellement</div>
+                        <div class="option correct">1: Utiliser des mots-clés pertinents et des filtres de recherche avancés</div>
+                        <div class="option incorrect">2: Demander à tous les collègues</div>
+                        <div class="option incorrect">3: Recréer le document depuis zéro</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">La recherche avancée combine mots-clés, filtres par date, type de fichier, et utilise l'indexation automatique. Objectif : retrouver en moins de 30 secondes.</div>
+                        <div class="reference">📚 Référence : Module 4 - Techniques de recherche efficace</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">15</div>
+                        <div class="question-text">Comment créer efficacement un espace projet partagé avec droits différenciés ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Donner le même accès à tout le monde</div>
+                        <div class="option correct">1: Définir des rôles (lecture, écriture, administration) selon les besoins</div>
+                        <div class="option incorrect">2: Interdire tout partage</div>
+                        <div class="option incorrect">3: Utiliser uniquement l'email</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Définir des rôles clairs : Lecteur (consultation), Éditeur (modification), Propriétaire (gestion complète). Principe du moindre privilège appliqué.</div>
+                        <div class="reference">📚 Référence : Module 4 - Gestion des espaces partagés</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">16</div>
+                        <div class="question-text">Si vous devez restaurer une version précédente d'un document, où cherchez-vous ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Dans la corbeille uniquement</div>
+                        <div class="option correct">1: Historique des versions / propriétés du fichier</div>
+                        <div class="option incorrect">2: Dans un autre logiciel</div>
+                        <div class="option incorrect">3: Il faut le recréer entièrement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Clic droit > Historique des versions ou Propriétés du fichier. Chaque modification est horodatée et peut être restaurée individuellement.</div>
+                        <div class="reference">📚 Référence : Module 4 - Gestion des versions</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">17</div>
+                        <div class="question-text">Pour optimiser la collaboration en temps réel, quelle pratique éviter ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Utiliser les commentaires intégrés</div>
+                        <div class="option correct">1: Envoyer des copies par email à chaque modification</div>
+                        <div class="option incorrect">2: Définir des permissions claires</div>
+                        <div class="option incorrect">3: Utiliser la synchronisation automatique</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Éviter les copies par email qui créent des versions multiples et de la confusion. Privilégier le document unique partagé avec collaboration temps réel.</div>
+                        <div class="reference">📚 Référence : Module 4 - Bonnes pratiques collaboration</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">18</div>
+                        <div class="question-text">Quelle est la première étape pour mettre en place un système d'archivage efficace ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Acheter le logiciel le plus cher</div>
+                        <div class="option correct">1: Auditer l'existant et définir les besoins métier</div>
+                        <div class="option incorrect">2: Former tout le monde en même temps</div>
+                        <div class="option incorrect">3: Supprimer tous les anciens documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'audit préalable identifie les flux documentaires, les goulots d'étranglement et les besoins spécifiques avant tout choix technologique.</div>
+                        <div class="reference">📚 Référence : Module 4 - Méthodologie de mise en place</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 5 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 5 : Canva et Supports Visuels
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">22</div>
+                        <div class="question-text">Quel est l'intérêt principal de Canva pour une secrétaire de la DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Créer des logos d'entreprise</div>
+                        <div class="option correct">1: Visualiser et documenter les processus métier</div>
+                        <div class="option incorrect">2: Retoucher des photos de vacances</div>
+                        <div class="option incorrect">3: Créer des jeux vidéo</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Pour le secrétariat DGI : créer des organigrammes de flux, documenter les circuits de validation, former visuellement les nouveaux arrivants.</div>
+                        <div class="reference">📚 Référence : Module 5 - Applications métier de Canva</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">23</div>
+                        <div class="question-text">Pour documenter le circuit de traitement des factures, quel template Canva utiliser ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Template "Recette de cuisine"</div>
+                        <div class="option correct">1: Template "Flowchart" ou "Process"</div>
+                        <div class="option incorrect">2: Template "Carte de visite"</div>
+                        <div class="option incorrect">3: Template "Album photo"</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les templates Flowchart permettent de créer des diagrammes de flux avec des formes prédéfinies (rectangle = action, losange = décision).</div>
+                        <div class="reference">📚 Référence : Module 5 - Création d'organigrammes de flux</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">24</div>
+                        <div class="question-text">Quel support Canva serait le plus utile pour former un nouveau collègue ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Un poster décoratif</div>
+                        <div class="option correct">1: Un organigramme des flux documentaires du service</div>
+                        <div class="option incorrect">2: Une carte de restaurant</div>
+                        <div class="option incorrect">3: Un calendrier de l'année dernière</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Un organigramme visuel réduit le temps d'explication de 30 minutes à 5 minutes. Plus efficace que les explications orales.</div>
+                        <div class="reference">📚 Référence : Module 5 - Formation et transmission visuelle</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">25</div>
+                        <div class="question-text">Comment créer un QR code dans Canva pour partager l'accès à un dossier Google Drive ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Dessiner le QR code à la main</div>
+                        <div class="option correct">1: Utiliser l'élément "QR Code" et saisir l'URL du dossier partagé</div>
+                        <div class="option incorrect">2: Prendre une photo d'un QR code existant</div>
+                        <div class="option incorrect">3: Importer une image depuis Internet</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Élément > QR Code > Coller l'URL du dossier Drive partagé. Le QR code se génère automatiquement et peut être intégré dans vos documents.</div>
+                        <div class="reference">📚 Référence : Module 5 - Intégration QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">26</div>
+                        <div class="question-text">Quel est l'avantage principal d'un QR code sur une fiche de contact secrétaire DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Décoration visuelle du document</div>
+                        <div class="option correct">1: Accès instantané aux coordonnées sans saisie manuelle</div>
+                        <div class="option incorrect">2: Réduction du coût d'impression</div>
+                        <div class="option incorrect">3: Amélioration de la police de caractères</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Scan du QR code = ajout automatique dans les contacts du téléphone. Évite les erreurs de saisie et fait gagner du temps.</div>
+                        <div class="reference">📚 Référence : Module 5 - Applications pratiques QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">27</div>
+                        <div class="question-text">Dans quel contexte un QR code serait le plus utile pour le secrétariat DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option correct">0: Sur un planning affiché pour accéder directement au dossier numérique</div>
+                        <div class="option incorrect">1: Pour décorer les murs du bureau</div>
+                        <div class="option incorrect">2: Pour remplacer complètement les emails</div>
+                        <div class="option incorrect">3: Pour changer la couleur des documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">QR code sur planning affiché = accès mobile instantané au dossier numérique correspondant. Ponte entre physique et numérique.</div>
+                        <div class="reference">📚 Référence : Module 5 - Intégration bureautique QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">28</div>
+                        <div class="question-text">Pourquoi exporter vos créations Canva vers Google Drive plutôt que les laisser uniquement sur Canva ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Pour économiser de l'espace sur Canva</div>
+                        <div class="option correct">1: Pour intégrer les supports visuels dans votre arborescence documentaire organisée</div>
+                        <div class="option incorrect">2: Pour améliorer la qualité des images</div>
+                        <div class="option incorrect">3: Pour pouvoir les imprimer en couleur</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Intégration dans l'arborescence Drive = collègues trouvent guides visuels et documents au même endroit. Cohérence de l'organisation.</div>
+                        <div class="reference">📚 Référence : Module 5 - Workflow Canva-Drive</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">29</div>
+                        <div class="question-text">Quel est l'avantage principal d'avoir vos organigrammes de processus dans le même dossier Google Drive que vos documents de travail ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Cela prend moins de place sur le serveur</div>
+                        <div class="option correct">1: Les collègues peuvent accéder aux guides visuels et aux documents liés au même endroit</div>
+                        <div class="option incorrect">2: Canva fonctionne mieux avec Google Drive</div>
+                        <div class="option incorrect">3: Les images sont automatiquement traduites</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Centralisation = efficacité. Les utilisateurs accèdent aux procédures ET aux documents de travail au même endroit. Principe de cohérence organisationnelle.</div>
+                        <div class="reference">📚 Référence : Module 5 - Organisation intégrée documents-guides</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 6 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 6 : Infrastructure Numérique Professionnelle
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">19</div>
+                        <div class="question-text">Que se passe-t-il si une secrétaire utilise son Gmail personnel pour les documents de la DGI et qu'elle quitte l'entreprise ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Rien, les documents restent accessibles</div>
+                        <div class="option correct">1: L'entreprise perd l'accès aux documents partagés</div>
+                        <div class="option incorrect">2: Les documents sont automatiquement transférés</div>
+                        <div class="option incorrect">3: Gmail supprime automatiquement les documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Compte personnel = propriété personnelle. En cas de départ, l'entreprise perd tout accès. D'où l'importance des comptes professionnels.</div>
+                        <div class="reference">📚 Référence : Module 6 - Règle fondamentale de l'archivage</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">20</div>
+                        <div class="question-text">Quel est l'avantage principal d'un compte professionnel @entreprisedgi.com ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Interface plus jolie</div>
+                        <div class="option incorrect">1: Plus d'espace de stockage gratuit</div>
+                        <div class="option correct">2: Contrôle et continuité par l'administrateur</div>
+                        <div class="option incorrect">3: Moins de publicités</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'administrateur peut gérer les accès, transférer la propriété des documents, appliquer des politiques de sécurité et assurer la continuité.</div>
+                        <div class="reference">📚 Référence : Module 6 - Avantages des comptes professionnels</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">21</div>
+                        <div class="question-text">En cas d'audit RGPD, utiliser des comptes personnels pour les données entreprise peut entraîner :</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Une félicitation pour l'innovation</div>
+                        <div class="option correct">1: Une non-conformité et des sanctions</div>
+                        <div class="option incorrect">2: Une prime de performance</div>
+                        <div class="option incorrect">3: Aucune conséquence</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Le RGPD impose un contrôle strict sur les données personnelles. Les comptes personnels échappent au contrôle de l'entreprise = non-conformité.</div>
+                        <div class="reference">📚 Référence : Module 6 - Conformité RGPD et comptes professionnels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 20px; margin-top: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <h3 style="color: #4a5568; margin-bottom: 15px;">🎯 Conseils pour la Suite</h3>
+            <p style="color: #718096; line-height: 1.6;">
+                Révisez particulièrement les questions que vous avez ratées. 
+                Chaque explication contient les références aux modules de formation pour approfondir.
+                Un score de 70% minimum est requis pour valider la formation.
+            </p>
         </div>
     </div>
 
     <script>
-        // Graphique comparaison scores
-        const ctx1 = document.getElementById('scoresChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Mokoy', 'Lokwa', 'Kabwa', 'Bodat', 'Bolina', 'Lessa'],
-                datasets: [{
-                    label: 'Score Initial (Buggé)',
-                    data: [62, 62, 62, 55, 48, 48],
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)'
-                }, {
-                    label: 'Score Final (Corrigé)',
-                    data: [79, 76, 72, 73, 69, 68],
-                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                            text: 'Score (%)'
-                        }
-                    }
-                }
-            }
-        });
+        function toggleModule(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            content.classList.toggle('active');
+            icon.classList.toggle('rotated');
+        }
 
-        // Graphique performance par module
-        const ctx2 = document.getElementById('modulesChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'radar',
-            data: {
-                labels: ['Fondamentaux', 'Bonnes Pratiques', 'Outils GED', 'Cas Pratiques', 'Infrastructure', 'Canva & QR'],
-                datasets: [{
-                    label: 'Taux de Réussite (%)',
-                    data: [83, 78, 85, 72, 89, 74],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        // Graphique planning de suivi
-        const ctx3 = document.getElementById('suiviChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'line',
-            data: {
-                labels: ['Octobre', 'Novembre', 'Décembre', 'Janvier'],
-                datasets: [{
-                    label: 'Heures de Suivi Cumulées',
-                    data: [8, 22, 36, 48],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 60,
-                        title: {
-                            display: true,
-                            text: 'Heures'
-                        }
-                    }
-                }
+        // Auto-expand first module
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstModule = document.querySelector('.module-content');
+            const firstIcon = document.querySelector('.toggle-icon');
+            if (firstModule) {
+                firstModule.classList.add('active');
+                firstIcon.classList.add('rotated');
             }
         });
     </script>
