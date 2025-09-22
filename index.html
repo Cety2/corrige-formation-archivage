@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Résultats - Formation Archivage Numérique</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #48bb78, #4299e1, #9f7aea);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        .header .date-info {
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+            padding: 15px 30px;
+            border-radius: 25px;
+            display: inline-block;
+            color: #4a5568;
+            font-weight: 600;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 25px 30px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section-header .icon {
+            font-size: 1.8rem;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #4299e1;
+        }
+        
+        .metric-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-label {
+            color: #718096;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .participant-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .participant-table th {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .participant-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .participant-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .score-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .score-bien {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+        
+        .score-assez-bien {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+        }
+        
+        .improvement-badge {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .module-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .module-card {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #4299e1;
+        }
+        
+        .module-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .module-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4299e1;
+            margin-bottom: 10px;
+        }
+        
+        .module-details {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #4299e1;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4299e1;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .action-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #4299e1;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .contact-info {
+            color: #718096;
+        }
+        
+        .signature {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .header .date-info {
+                font-size: 0.9rem;
+                padding: 12px 20px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .section-header {
+                padding: 20px 15px;
+                font-size: 1.2rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .metric-card {
+                padding: 20px 15px;
+            }
+            
+            .metric-number {
+                font-size: 2.2rem;
+            }
+            
+            .metric-label {
+                font-size: 0.9rem;
+            }
+            
+            .participant-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .participant-table th,
+            .participant-table td {
+                padding: 10px 8px;
+                min-width: 120px;
+            }
+            
+            .score-badge {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .improvement-badge {
+                padding: 3px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .module-analysis {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .module-card {
+                padding: 15px;
+            }
+            
+            .module-score {
+                font-size: 1.5rem;
+            }
+            
+            .timeline {
+                padding-left: 20px;
+            }
+            
+            .timeline-item {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .timeline-item::before {
+                left: -27px;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .action-item {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .chart-container {
+                padding: 15px;
+            }
+            
+            .chart-title {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+            
+            .header .subtitle {
+                font-size: 1rem;
+            }
+            
+            .header .date-info {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+            }
+            
+            .container {
+                padding: 8px;
+            }
+            
+            .section {
+                margin-bottom: 20px;
+            }
+            
+            .section-content {
+                padding: 12px;
+            }
+            
+            .section-header {
+                padding: 15px 12px;
+                font-size: 1.1rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .metric-card {
+                padding: 18px 12px;
+            }
+            
+            .metric-number {
+                font-size: 2rem;
+            }
+            
+            .metric-label {
+                font-size: 0.85rem;
+            }
+            
+            .participant-table {
+                font-size: 0.8rem;
+            }
+            
+            .participant-table th,
+            .participant-table td {
+                padding: 8px 6px;
+                min-width: 100px;
+            }
+            
+            .module-card {
+                padding: 12px;
+            }
+            
+            .module-title {
+                font-size: 0.9rem;
+            }
+            
+            .module-score {
+                font-size: 1.3rem;
+            }
+            
+            .module-details {
+                font-size: 0.8rem;
+            }
+            
+            .timeline-item {
+                padding: 12px;
+            }
+            
+            .timeline-title {
+                font-size: 0.9rem;
+            }
+            
+            .action-item {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            
+            .chart-container {
+                padding: 12px;
+            }
+            
+            .chart-title {
+                font-size: 0.9rem;
+            }
+            
+            .progress-fill {
+                font-size: 0.7rem;
+                padding-right: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Rapport de Résultats Final</h1>
+            <div class="subtitle">Formation Archivage Numérique</div>
+            <div class="date-info">17-21 Septembre 2025 • 6 Participants</div>
+        </div>
+
+        <!-- SYNTHÈSE EXÉCUTIVE -->
+        <div class="section">
+            <div class="section-header">
+                <span>📊 Synthèse Exécutive</span>
+                <span class="icon">🎯</span>
+            </div>
+            <div class="section-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-number">100%</div>
+                        <div class="metric-label">Taux de Réussite</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">76%</div>
+                        <div class="metric-label">Score Moyen</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">+14</div>
+                        <div class="metric-label">Points d'Amélioration</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">6/6</div>
+                        <div class="metric-label">Participants Qualifiés</div>
+                    </div>
+                </div>
+                
+                <p style="color: #4a5568; font-size: 1.1rem; line-height: 1.8; text-align: center; margin-top: 20px;">
+                    Formation achevée avec succès après correction technique. Évaluation rigoureuse révélant des performances 
+                    supérieures aux scores initiaux. Tous les participants atteignent le niveau opérationnel requis.
+                </p>
+            </div>
+        </div>
+
+        <!-- CORRECTION TECHNIQUE -->
+        <div class="section">
+            <div class="section-header">
+                <span>🔧 Correction Technique Appliquée</span>
+                <span class="icon">✅</span>
+            </div>
+            <div class="section-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">1. Détection du Dysfonctionnement</div>
+                        <p>Bug d'évaluation causant sous-notation de 10-20 points par participant. Détection par analyse comparative et vérification croisée avec le corrigé officiel.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2. Actions Correctives</div>
+                        <div class="action-grid">
+                            <div class="action-item">Purge base de données</div>
+                            <div class="action-item">Correction algorithme</div>
+                            <div class="action-item">Tests de validation</div>
+                            <div class="action-item">Nouveau quiz participants</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">3. Validation des Résultats</div>
+                        <p>Vérification systématique avec le corrigé officiel des 29 questions. Révélation des véritables performances masquées par le bug technique.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RÉSULTATS PARTICIPANTS -->
+        <div class="section">
+            <div class="section-header">
+                <span>👥 Résultats Finaux par Participant</span>
+                <span class="icon">📈</span>
+            </div>
+            <div class="section-content">
+                <table class="participant-table">
+                    <thead>
+                        <tr>
+                            <th>Participant</th>
+                            <th>Score Initial</th>
+                            <th>Score Final</th>
+                            <th>Amélioration</th>
+                            <th>Niveau Atteint</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MOKOY NDINGO JOE</strong></td>
+                            <td>62%</td>
+                            <td><strong>79%</strong></td>
+                            <td><span class="improvement-badge">+17</span></td>
+                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>LOKWA NADINE</strong></td>
+                            <td>62%</td>
+                            <td><strong>76%</strong></td>
+                            <td><span class="improvement-badge">+14</span></td>
+                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>KABWA PATIE</strong></td>
+                            <td>62%</td>
+                            <td><strong>72%</strong></td>
+                            <td><span class="improvement-badge">+10</span></td>
+                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>BODAT</strong></td>
+                            <td>55%</td>
+                            <td><strong>73%</strong></td>
+                            <td><span class="improvement-badge">+18</span></td>
+                            <td><span class="score-badge score-bien">Bien (14-15/20)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>BOLINA BAKINA J. de D.</strong></td>
+                            <td>48%</td>
+                            <td><strong>69%</strong></td>
+                            <td><span class="improvement-badge">+21</span></td>
+                            <td><span class="score-badge score-assez-bien">Assez Bien (12-13/20)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>LESSA LUKENI MEANCE</strong></td>
+                            <td>48%</td>
+                            <td><strong>68%</strong></td>
+                            <td><span class="improvement-badge">+20</span></td>
+                            <td><span class="score-badge score-assez-bien">Assez Bien (12-13/20)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="chart-container">
+                    <div class="chart-title">Comparaison Scores Avant/Après Correction</div>
+                    <canvas id="scoresChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYSE DES COMPÉTENCES -->
+        <div class="section">
+            <div class="section-header">
+                <span>📚 Analyse Détaillée des Compétences</span>
+                <span class="icon">🎓</span>
+            </div>
+            <div class="section-content">
+                <div class="module-analysis">
+                    <div class="module-card">
+                        <div class="module-title">Module 1 - Fondamentaux</div>
+                        <div class="module-score">83%</div>
+                        <div class="module-details">
+                            Questions 0-2 • Concepts RGPD et enjeux bien assimilés
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 83%; background: linear-gradient(135deg, #48bb78, #38a169);">83%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-title">Module 2 - Bonnes Pratiques</div>
+                        <div class="module-score">78%</div>
+                        <div class="module-details">
+                            Questions 3-7 • Nommage et arborescences maîtrisés
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 78%; background: linear-gradient(135deg, #48bb78, #38a169);">78%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-title">Module 3 - Outils GED</div>
+                        <div class="module-score">85%</div>
+                        <div class="module-details">
+                            Questions 8-12 • Excellente appropriation des outils cloud
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 85%; background: linear-gradient(135deg, #48bb78, #38a169);">85%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-title">Module 4 - Cas Pratiques</div>
+                        <div class="module-score">72%</div>
+                        <div class="module-details">
+                            Questions 13-17 • Recherche avancée et versioning compris
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 72%; background: linear-gradient(135deg, #48bb78, #38a169);">72%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-title">Module 5 - Infrastructure</div>
+                        <div class="module-score">89%</div>
+                        <div class="module-details">
+                            Questions 18-20 • Enjeux RGPD parfaitement saisis
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 89%; background: linear-gradient(135deg, #48bb78, #38a169);">89%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-title">Module 6 - Canva & QR Codes</div>
+                        <div class="module-score">74%</div>
+                        <div class="module-details">
+                            Questions 21-28 • Applications métier comprises
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill score-bien" style="width: 74%; background: linear-gradient(135deg, #48bb78, #38a169);">74%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Performance par Module</div>
+                    <canvas id="modulesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉVALUATION GLOBALE -->
+        <div class="section">
+            <div class="section-header">
+                <span>🎯 Évaluation Globale de la Formation</span>
+                <span class="icon">✅</span>
+            </div>
+            <div class="section-content">
+                <table class="participant-table">
+                    <thead>
+                        <tr>
+                            <th>Critère</th>
+                            <th>Objectif</th>
+                            <th>Résultat</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Taux de réussite (≥60%)</strong></td>
+                            <td>80%</td>
+                            <td><strong>100%</strong></td>
+                            <td><span class="score-badge score-bien">Dépassé</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Score moyen</strong></td>
+                            <td>65%</td>
+                            <td><strong>76%</strong></td>
+                            <td><span class="score-badge score-bien">Dépassé</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Appropriation outils</strong></td>
+                            <td>70%</td>
+                            <td><strong>85%</strong></td>
+                            <td><span class="score-badge score-bien">Dépassé</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Autonomie acquise</strong></td>
+                            <td>75%</td>
+                            <td><strong>78%</strong></td>
+                            <td><span class="score-badge score-bien">Atteint</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PROPOSITION DE SUIVI -->
+        <div class="section">
+            <div class="section-header">
+                <span>🚀 Proposition de Suivi Post-Formation</span>
+                <span class="icon">📅</span>
+            </div>
+            <div class="section-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">Actions Immédiates (30 jours)</div>
+                        <div class="action-grid">
+                            <div class="action-item">Migration comptes @entreprisedgi.com</div>
+                            <div class="action-item">Application règles de nommage</div>
+                            <div class="action-item">Implémentation arborescence</div>
+                            <div class="action-item">Formation des absents</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">Actions Moyen Terme (3 mois)</div>
+                        <div class="action-grid">
+                            <div class="action-item">Révisions Visio Teams (Oct-Nov)</div>
+                            <div class="action-item">Migration comptes @entreprisedgi.com</div>
+                            <div class="action-item">Perfectionnement workflows</div>
+                            <div class="action-item">Sessions présentielles (Déc)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Planning de Suivi - 48 heures sur 3 mois</div>
+                    <canvas id="suiviChart" width="400" height="200"></canvas>
+                </div>
+
+                <table class="participant-table" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Session</th>
+                            <th>Contenu</th>
+                            <th>Durée</th>
+                            <th>Format</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Révision Ciblée 1</strong></td>
+                            <td>Durées de conservation, Réglementation RGPD approfondie (Bolina, Lessa priorité)</td>
+                            <td>4h</td>
+                            <td>Visio Teams (Octobre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Révision Ciblée 2</strong></td>
+                            <td>Templates Canva avancés, QR Codes dynamiques (Bolina, Lessa)</td>
+                            <td>4h</td>
+                            <td>Visio Teams (Novembre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Perfectionnement Groupe</strong></td>
+                            <td>Recherche avancée, Workflows Box, Automatisations (Mokoy, Lokwa, Kabwa, Bodat)</td>
+                            <td>6h</td>
+                            <td>Visio Teams (Novembre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Migration Technique</strong></td>
+                            <td>Configuration comptes @entreprisedgi.com, Transfert données (Tous)</td>
+                            <td>8h</td>
+                            <td>Visio Teams (Octobre-Novembre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Audit et Conformité</strong></td>
+                            <td>Évaluation RGPD, Mise en conformité finale (Tous)</td>
+                            <td>6h</td>
+                            <td>Présentiel (Décembre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Formation Formateurs</strong></td>
+                            <td>Capacité formation interne, Création supports (Mokoy, Lokwa référents)</td>
+                            <td>8h</td>
+                            <td>Présentiel (Décembre)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Extension Services</strong></td>
+                            <td>Déploiement autres départements (Managers + participants)</td>
+                            <td>12h</td>
+                            <td>Présentiel (Janvier)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CONCLUSION -->
+        <div class="section">
+            <div class="section-header">
+                <span>🎉 Conclusion</span>
+                <span class="icon">🏆</span>
+            </div>
+            <div class="section-content">
+                <div style="background: linear-gradient(135deg, #f0fff4, #c6f6d5); padding: 30px; border-radius: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #22543d; margin-bottom: 15px; text-align: center;">Succès Technique et Pédagogique Confirmé</h3>
+                    <p style="color: #2f855a; text-align: center; font-size: 1.1rem; line-height: 1.8;">
+                        La formation "Archivage Numérique" constitue un succès complet avec 100% de réussite après correction 
+                        du bug technique. Le processus de détection et résolution a démontré la rigueur de l'approche qualité.
+                    </p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-number">100%</div>
+                        <div class="metric-label">Réussite</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">76%</div>
+                        <div class="metric-label">Score Moyen</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">6</div>
+                        <div class="metric-label">Participants Autonomes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">48h</div>
+                        <div class="metric-label">Suivi Planifié</div>
+                    </div>
+                </div>
+
+                <div style="background: #f7fafc; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                    <h4 style="color: #2d3748; margin-bottom: 15px;">Impact Organisationnel</h4>
+                    <div class="action-grid">
+                        <div class="action-item">Modernisation pratiques documentaires</div>
+                        <div class="action-item">Capacité de formation interne</div>
+                        <div class="action-item">Conformité réglementaire assurée</div>
+                        <div class="action-item">Référence pour autres services</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h4 style="color: #2d3748; margin-bottom: 5px;">Rapport établi le</h4>
+                    <p>22 septembre 2025 par Cétiane Mangobe</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Graphique comparaison scores
+        const ctx1 = document.getElementById('scoresChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Mokoy', 'Lokwa', 'Kabwa', 'Bodat', 'Bolina', 'Lessa'],
+                datasets: [{
+                    label: 'Score Initial (Buggé)',
+                    data: [62, 62, 62, 55, 48, 48],
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)'
+                }, {
+                    label: 'Score Final (Corrigé)',
+                    data: [79, 76, 72, 73, 69, 68],
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Score (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Graphique performance par module
+        const ctx2 = document.getElementById('modulesChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'radar',
+            data: {
+                labels: ['Fondamentaux', 'Bonnes Pratiques', 'Outils GED', 'Cas Pratiques', 'Infrastructure', 'Canva & QR'],
+                datasets: [{
+                    label: 'Taux de Réussite (%)',
+                    data: [83, 78, 85, 72, 89, 74],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Graphique planning de suivi
+        const ctx3 = document.getElementById('suiviChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['Octobre', 'Novembre', 'Décembre', 'Janvier'],
+                datasets: [{
+                    label: 'Heures de Suivi Cumulées',
+                    data: [8, 22, 36, 48],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 60,
+                        title: {
+                            display: true,
+                            text: 'Heures'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
