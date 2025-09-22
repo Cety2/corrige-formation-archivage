@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrigé Digital - Formation Archivage Numérique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .module {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .module-header:hover {
+            background: linear-gradient(135deg, #3182ce, #2c5282);
+        }
+        
+        .module-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .module-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .module-content.active {
+            max-height: 5000px;
+            padding: 20px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #4299e1;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+        
+        .options {
+            margin: 15px 0;
+        }
+        
+        .option {
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .option.correct {
+            background: #c6f6d5;
+            border-color: #48bb78;
+            color: #22543d;
+        }
+        
+        .option.incorrect {
+            background: #fed7d7;
+            border-color: #e53e3e;
+            color: #742a2a;
+        }
+        
+        .explanation {
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .explanation-header {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .explanation-text {
+            color: #718096;
+            line-height: 1.6;
+        }
+        
+        .reference {
+            background: #bee3f8;
+            color: #2c5282;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4299e1;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Corrigé Digital</h1>
+            <p>Formation Archivage Numérique - 17-20 Septembre 2025</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">29</div>
+                <div class="stat-label">Questions</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Modules</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">70%</div>
+                <div class="stat-label">Seuil de Réussite</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">58</div>
+                <div class="stat-label">Minutes Recommandées</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #4a5568;">Corrigé Complet - 29/29 Questions</p>
+        </div>
+
+        <!-- MODULE 1 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 1 : Introduction à l'Archivage Numérique
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">1</div>
+                        <div class="question-text">Quel est le principal enjeu de l'archivage numérique dans une organisation moderne ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Réduire les coûts de stockage physique</div>
+                        <div class="option correct">1: Assurer la sécurité, l'accessibilité et la conformité des données</div>
+                        <div class="option incorrect">2: Diminuer le nombre d'employés</div>
+                        <div class="option incorrect">3: Améliorer le design des bureaux</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'archivage numérique moderne repose sur trois piliers fondamentaux : la SÉCURITÉ (protection contre les pertes), l'ACCESSIBILITÉ (retrouver rapidement) et la CONFORMITÉ (respect des obligations légales).</div>
+                        <div class="reference">📚 Référence : Module 1 - Les 3 piliers de l'archivage numérique</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">2</div>
+                        <div class="question-text">Quels sont les principaux risques d'un mauvais archivage numérique ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Augmentation des ventes</div>
+                        <div class="option correct">1: Pertes de données, doublons et non-respect des obligations légales</div>
+                        <div class="option incorrect">2: Amélioration de la productivité</div>
+                        <div class="option incorrect">3: Réduction des coûts</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Un mauvais archivage entraîne des risques opérationnels (perte de temps, doublons), juridiques (non-conformité) et financiers (amendes, reconstitution).</div>
+                        <div class="reference">📚 Référence : Module 1 - Risques du mauvais archivage</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">3</div>
+                        <div class="question-text">Dans le contexte RGPD, combien de temps maximum avez-vous pour notifier une violation de données ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: 24 heures</div>
+                        <div class="option incorrect">1: 48 heures</div>
+                        <div class="option correct">2: 72 heures</div>
+                        <div class="option incorrect">3: 1 semaine</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'article 33 du RGPD impose une notification à l'autorité de contrôle dans les 72 heures. Astuce mnémotechnique : 72h = 3 jours ouvrables.</div>
+                        <div class="reference">📚 Référence : Module 1 - Conformité RGPD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 2 : Bonnes Pratiques de Classement
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">4</div>
+                        <div class="question-text">Quelle est la meilleure pratique pour nommer un fichier de facture ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: facture.pdf</div>
+                        <div class="option correct">1: FACTURE_2025-09-16_ENTREPRISE-ABC_F001.pdf</div>
+                        <div class="option incorrect">2: document1.pdf</div>
+                        <div class="option incorrect">3: mon_fichier.pdf</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Structure recommandée : AAAAMMJJ_TYPE_OBJET_VERSION. Date au début pour tri chronologique, pas d'espaces, mots-clés en majuscules.</div>
+                        <div class="reference">📚 Référence : Module 2 - Règles de nommage des fichiers</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">5</div>
+                        <div class="question-text">Quelle arborescence est la plus logique pour organiser des documents d'entreprise ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Tous les fichiers dans un seul dossier</div>
+                        <div class="option correct">1: Organisation par année > service > projet > type de document</div>
+                        <div class="option incorrect">2: Classement alphabétique uniquement</div>
+                        <div class="option incorrect">3: Organisation par couleur des dossiers</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'arborescence logique suit une hiérarchie temporelle puis organisationnelle, permettant une navigation intuitive et une évolutivité.</div>
+                        <div class="reference">📚 Référence : Module 2 - Création d'arborescences logiques</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">6</div>
+                        <div class="question-text">Combien de temps doit-on conserver les factures clients selon la loi française ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: 3 ans</div>
+                        <div class="option incorrect">1: 5 ans</div>
+                        <div class="option correct">2: 10 ans</div>
+                        <div class="option incorrect">3: 15 ans</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les factures clients doivent être conservées 10 ans selon la législation française. Les bulletins de paie : 50 ans, les déclarations fiscales : 6 ans.</div>
+                        <div class="reference">📚 Référence : Module 2 - Durées de conservation légales</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">7</div>
+                        <div class="question-text">Quel principe de gestion des droits d'accès est recommandé ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Donner tous les droits à tout le monde</div>
+                        <div class="option correct">1: Principe du moindre privilège (accès minimal nécessaire)</div>
+                        <div class="option incorrect">2: Seul le directeur a accès aux documents</div>
+                        <div class="option incorrect">3: Accès basé sur l'ancienneté uniquement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Le principe du moindre privilège consiste à donner uniquement les droits minimum nécessaires pour effectuer le travail. Sécurité optimale.</div>
+                        <div class="reference">📚 Référence : Module 2 - Gestion des droits d'accès</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">8</div>
+                        <div class="question-text">Qu'est-ce que l'automatisation du classement permet d'améliorer ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: La décoration des bureaux</div>
+                        <div class="option correct">1: La cohérence, la vitesse et la réduction des erreurs humaines</div>
+                        <div class="option incorrect">2: Le nombre d'employés</div>
+                        <div class="option incorrect">3: La couleur des documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'automatisation apporte cohérence (même règles appliquées), rapidité (traitement en masse) et fiabilité (moins d'erreurs manuelles).</div>
+                        <div class="reference">📚 Référence : Module 2 - Automatisation du classement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 3 : Outils Modernes de GED
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">9</div>
+                        <div class="question-text">Quelle technologie permet la collaboration en temps réel sur un document ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Email uniquement</div>
+                        <div class="option correct">1: Plateforme collaborative cloud (Google Workspace, Office 365)</div>
+                        <div class="option incorrect">2: Téléphone</div>
+                        <div class="option incorrect">3: Courrier postal</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les plateformes cloud permettent l'édition simultanée, les commentaires en temps réel et la synchronisation automatique des modifications.</div>
+                        <div class="reference">📚 Référence : Module 3 - Collaboration avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">10</div>
+                        <div class="question-text">Quelle mesure de sécurité est essentielle pour protéger l'archivage numérique ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Utiliser des mots de passe simples</div>
+                        <div class="option correct">1: Double authentification et sauvegardes régulières</div>
+                        <div class="option incorrect">2: Garder tous les accès ouverts</div>
+                        <div class="option incorrect">3: Ne jamais faire de mise à jour</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">La double authentification ajoute une couche de sécurité, et les sauvegardes protègent contre la perte de données. Deux mesures complémentaires essentielles.</div>
+                        <div class="reference">📚 Référence : Module 3 - Sécurisation avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">11</div>
+                        <div class="question-text">Quel avantage spécifique offre Google Drive pour l'archivage ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Stockage illimité gratuit</div>
+                        <div class="option correct">1: Recherche intelligente et intégration Google Workspace</div>
+                        <div class="option incorrect">2: Impossibilité de partage</div>
+                        <div class="option incorrect">3: Accès hors ligne uniquement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Google Drive excelle par sa recherche OCR dans les PDF, sa recherche par type de fichier, et l'intégration native avec Docs, Sheets, etc.</div>
+                        <div class="reference">📚 Référence : Module 3 - Google Drive utilisation avancée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">12</div>
+                        <div class="question-text">Pourquoi Box est-il particulièrement adapté aux entreprises ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Il est gratuit pour tous</div>
+                        <div class="option correct">1: Gestion avancée des droits, traçabilité et sécurité renforcée</div>
+                        <div class="option incorrect">2: Il ne fonctionne que sur mobile</div>
+                        <div class="option incorrect">3: Il n'autorise aucun partage</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Box propose des workflows d'approbation, un audit complet des accès, et des fonctionnalités de sécurité entreprise (watermarking, restrictions géographiques).</div>
+                        <div class="reference">📚 Référence : Module 3 - Box gestion documentaire sécurisée</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">13</div>
+                        <div class="question-text">Quelle fonctionnalité est commune aux trois outils (Drive, OneDrive, Box) ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option correct">0: Versioning et historique des modifications</div>
+                        <div class="option incorrect">1: Coût identique</div>
+                        <div class="option incorrect">2: Interface utilisateur identique</div>
+                        <div class="option incorrect">3: Limitation à 1 utilisateur</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Tous les outils GED modernes proposent le versioning pour restaurer des versions antérieures et tracer les modifications. Fonctionnalité fondamentale.</div>
+                        <div class="reference">📚 Référence : Module 3 - Fonctionnalités communes GED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 4 : Cas Pratiques Dirigés
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">14</div>
+                        <div class="question-text">Pour retrouver rapidement un document archivé, quelle méthode est la plus efficace ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Parcourir tous les dossiers manuellement</div>
+                        <div class="option correct">1: Utiliser des mots-clés pertinents et des filtres de recherche avancés</div>
+                        <div class="option incorrect">2: Demander à tous les collègues</div>
+                        <div class="option incorrect">3: Recréer le document depuis zéro</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">La recherche avancée combine mots-clés, filtres par date, type de fichier, et utilise l'indexation automatique. Objectif : retrouver en moins de 30 secondes.</div>
+                        <div class="reference">📚 Référence : Module 4 - Techniques de recherche efficace</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">15</div>
+                        <div class="question-text">Comment créer efficacement un espace projet partagé avec droits différenciés ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Donner le même accès à tout le monde</div>
+                        <div class="option correct">1: Définir des rôles (lecture, écriture, administration) selon les besoins</div>
+                        <div class="option incorrect">2: Interdire tout partage</div>
+                        <div class="option incorrect">3: Utiliser uniquement l'email</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Définir des rôles clairs : Lecteur (consultation), Éditeur (modification), Propriétaire (gestion complète). Principe du moindre privilège appliqué.</div>
+                        <div class="reference">📚 Référence : Module 4 - Gestion des espaces partagés</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">16</div>
+                        <div class="question-text">Si vous devez restaurer une version précédente d'un document, où cherchez-vous ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Dans la corbeille uniquement</div>
+                        <div class="option correct">1: Historique des versions / propriétés du fichier</div>
+                        <div class="option incorrect">2: Dans un autre logiciel</div>
+                        <div class="option incorrect">3: Il faut le recréer entièrement</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Clic droit > Historique des versions ou Propriétés du fichier. Chaque modification est horodatée et peut être restaurée individuellement.</div>
+                        <div class="reference">📚 Référence : Module 4 - Gestion des versions</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">17</div>
+                        <div class="question-text">Pour optimiser la collaboration en temps réel, quelle pratique éviter ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Utiliser les commentaires intégrés</div>
+                        <div class="option correct">1: Envoyer des copies par email à chaque modification</div>
+                        <div class="option incorrect">2: Définir des permissions claires</div>
+                        <div class="option incorrect">3: Utiliser la synchronisation automatique</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Éviter les copies par email qui créent des versions multiples et de la confusion. Privilégier le document unique partagé avec collaboration temps réel.</div>
+                        <div class="reference">📚 Référence : Module 4 - Bonnes pratiques collaboration</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">18</div>
+                        <div class="question-text">Quelle est la première étape pour mettre en place un système d'archivage efficace ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Acheter le logiciel le plus cher</div>
+                        <div class="option correct">1: Auditer l'existant et définir les besoins métier</div>
+                        <div class="option incorrect">2: Former tout le monde en même temps</div>
+                        <div class="option incorrect">3: Supprimer tous les anciens documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'audit préalable identifie les flux documentaires, les goulots d'étranglement et les besoins spécifiques avant tout choix technologique.</div>
+                        <div class="reference">📚 Référence : Module 4 - Méthodologie de mise en place</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 5 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 5 : Canva et Supports Visuels
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">22</div>
+                        <div class="question-text">Quel est l'intérêt principal de Canva pour une secrétaire de la DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Créer des logos d'entreprise</div>
+                        <div class="option correct">1: Visualiser et documenter les processus métier</div>
+                        <div class="option incorrect">2: Retoucher des photos de vacances</div>
+                        <div class="option incorrect">3: Créer des jeux vidéo</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Pour le secrétariat DGI : créer des organigrammes de flux, documenter les circuits de validation, former visuellement les nouveaux arrivants.</div>
+                        <div class="reference">📚 Référence : Module 5 - Applications métier de Canva</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">23</div>
+                        <div class="question-text">Pour documenter le circuit de traitement des factures, quel template Canva utiliser ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Template "Recette de cuisine"</div>
+                        <div class="option correct">1: Template "Flowchart" ou "Process"</div>
+                        <div class="option incorrect">2: Template "Carte de visite"</div>
+                        <div class="option incorrect">3: Template "Album photo"</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Les templates Flowchart permettent de créer des diagrammes de flux avec des formes prédéfinies (rectangle = action, losange = décision).</div>
+                        <div class="reference">📚 Référence : Module 5 - Création d'organigrammes de flux</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">24</div>
+                        <div class="question-text">Quel support Canva serait le plus utile pour former un nouveau collègue ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Un poster décoratif</div>
+                        <div class="option correct">1: Un organigramme des flux documentaires du service</div>
+                        <div class="option incorrect">2: Une carte de restaurant</div>
+                        <div class="option incorrect">3: Un calendrier de l'année dernière</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Un organigramme visuel réduit le temps d'explication de 30 minutes à 5 minutes. Plus efficace que les explications orales.</div>
+                        <div class="reference">📚 Référence : Module 5 - Formation et transmission visuelle</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">25</div>
+                        <div class="question-text">Comment créer un QR code dans Canva pour partager l'accès à un dossier Google Drive ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Dessiner le QR code à la main</div>
+                        <div class="option correct">1: Utiliser l'élément "QR Code" et saisir l'URL du dossier partagé</div>
+                        <div class="option incorrect">2: Prendre une photo d'un QR code existant</div>
+                        <div class="option incorrect">3: Importer une image depuis Internet</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Élément > QR Code > Coller l'URL du dossier Drive partagé. Le QR code se génère automatiquement et peut être intégré dans vos documents.</div>
+                        <div class="reference">📚 Référence : Module 5 - Intégration QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">26</div>
+                        <div class="question-text">Quel est l'avantage principal d'un QR code sur une fiche de contact secrétaire DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Décoration visuelle du document</div>
+                        <div class="option correct">1: Accès instantané aux coordonnées sans saisie manuelle</div>
+                        <div class="option incorrect">2: Réduction du coût d'impression</div>
+                        <div class="option incorrect">3: Amélioration de la police de caractères</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Scan du QR code = ajout automatique dans les contacts du téléphone. Évite les erreurs de saisie et fait gagner du temps.</div>
+                        <div class="reference">📚 Référence : Module 5 - Applications pratiques QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">27</div>
+                        <div class="question-text">Dans quel contexte un QR code serait le plus utile pour le secrétariat DGI ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option correct">0: Sur un planning affiché pour accéder directement au dossier numérique</div>
+                        <div class="option incorrect">1: Pour décorer les murs du bureau</div>
+                        <div class="option incorrect">2: Pour remplacer complètement les emails</div>
+                        <div class="option incorrect">3: Pour changer la couleur des documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">QR code sur planning affiché = accès mobile instantané au dossier numérique correspondant. Ponte entre physique et numérique.</div>
+                        <div class="reference">📚 Référence : Module 5 - Intégration bureautique QR codes</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">28</div>
+                        <div class="question-text">Pourquoi exporter vos créations Canva vers Google Drive plutôt que les laisser uniquement sur Canva ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Pour économiser de l'espace sur Canva</div>
+                        <div class="option correct">1: Pour intégrer les supports visuels dans votre arborescence documentaire organisée</div>
+                        <div class="option incorrect">2: Pour améliorer la qualité des images</div>
+                        <div class="option incorrect">3: Pour pouvoir les imprimer en couleur</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Intégration dans l'arborescence Drive = collègues trouvent guides visuels et documents au même endroit. Cohérence de l'organisation.</div>
+                        <div class="reference">📚 Référence : Module 5 - Workflow Canva-Drive</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">29</div>
+                        <div class="question-text">Quel est l'avantage principal d'avoir vos organigrammes de processus dans le même dossier Google Drive que vos documents de travail ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Cela prend moins de place sur le serveur</div>
+                        <div class="option correct">1: Les collègues peuvent accéder aux guides visuels et aux documents liés au même endroit</div>
+                        <div class="option incorrect">2: Canva fonctionne mieux avec Google Drive</div>
+                        <div class="option incorrect">3: Les images sont automatiquement traduites</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Centralisation = efficacité. Les utilisateurs accèdent aux procédures ET aux documents de travail au même endroit. Principe de cohérence organisationnelle.</div>
+                        <div class="reference">📚 Référence : Module 5 - Organisation intégrée documents-guides</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 6 -->
+        <div class="module">
+            <div class="module-header" onclick="toggleModule(this)">
+                <h2>
+                    Module 6 : Infrastructure Numérique Professionnelle
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="module-content">
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">19</div>
+                        <div class="question-text">Que se passe-t-il si une secrétaire utilise son Gmail personnel pour les documents de la DGI et qu'elle quitte l'entreprise ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Rien, les documents restent accessibles</div>
+                        <div class="option correct">1: L'entreprise perd l'accès aux documents partagés</div>
+                        <div class="option incorrect">2: Les documents sont automatiquement transférés</div>
+                        <div class="option incorrect">3: Gmail supprime automatiquement les documents</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Compte personnel = propriété personnelle. En cas de départ, l'entreprise perd tout accès. D'où l'importance des comptes professionnels.</div>
+                        <div class="reference">📚 Référence : Module 6 - Règle fondamentale de l'archivage</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">20</div>
+                        <div class="question-text">Quel est l'avantage principal d'un compte professionnel @entreprisedgi.com ?</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Interface plus jolie</div>
+                        <div class="option incorrect">1: Plus d'espace de stockage gratuit</div>
+                        <div class="option correct">2: Contrôle et continuité par l'administrateur</div>
+                        <div class="option incorrect">3: Moins de publicités</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">L'administrateur peut gérer les accès, transférer la propriété des documents, appliquer des politiques de sécurité et assurer la continuité.</div>
+                        <div class="reference">📚 Référence : Module 6 - Avantages des comptes professionnels</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-header">
+                        <div class="question-number">21</div>
+                        <div class="question-text">En cas d'audit RGPD, utiliser des comptes personnels pour les données entreprise peut entraîner :</div>
+                    </div>
+                    <div class="options">
+                        <div class="option incorrect">0: Une félicitation pour l'innovation</div>
+                        <div class="option correct">1: Une non-conformité et des sanctions</div>
+                        <div class="option incorrect">2: Une prime de performance</div>
+                        <div class="option incorrect">3: Aucune conséquence</div>
+                    </div>
+                    <div class="explanation">
+                        <div class="explanation-header">💡 Explication</div>
+                        <div class="explanation-text">Le RGPD impose un contrôle strict sur les données personnelles. Les comptes personnels échappent au contrôle de l'entreprise = non-conformité.</div>
+                        <div class="reference">📚 Référence : Module 6 - Conformité RGPD et comptes professionnels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 20px; margin-top: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <h3 style="color: #4a5568; margin-bottom: 15px;">🎯 Conseils pour la Suite</h3>
+            <p style="color: #718096; line-height: 1.6;">
+                Révisez particulièrement les questions que vous avez ratées. 
+                Chaque explication contient les références aux modules de formation pour approfondir.
+                Un score de 70% minimum est requis pour valider la formation.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleModule(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            content.classList.toggle('active');
+            icon.classList.toggle('rotated');
+        }
+
+        // Auto-expand first module
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstModule = document.querySelector('.module-content');
+            const firstIcon = document.querySelector('.toggle-icon');
+            if (firstModule) {
+                firstModule.classList.add('active');
+                firstIcon.classList.add('rotated');
+            }
+        });
+    </script>
+</body>
+</html>
